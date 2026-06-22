@@ -29,8 +29,6 @@ Abra o terminal na pasta raiz do projeto e instale as dependencias necessarias:
 ```bash
 npm install
 
-```
-
 # 3. Execucao da Suite de Testes
 
 O projeto conta com testes de Unidade, Integracao e Sistema (E2E). Para rodar os testes e verificar o Code Coverage:
@@ -38,16 +36,12 @@ O projeto conta com testes de Unidade, Integracao e Sistema (E2E). Para rodar os
 ```bash
 npm test
 
-```
-
 # 4. Iniciando o Servidor
 
 Para iniciar a aplicacao e acessar a interface:
 
 ```bash
 node src/server.js
-
-```
 
 Apos iniciar, abra o navegador e acesse: http://localhost:3000
 
