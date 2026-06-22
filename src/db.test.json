@@ -1,0 +1,37 @@
+{
+  "casos": [
+    {
+      "id": 2,
+      "titulo": "Caso Final",
+      "status": "Fechado"
+    }
+  ],
+  "suspeitos": [
+    {
+      "id": 3,
+      "casoId": 2,
+      "nome": "Culpado",
+      "status": "Indiciado",
+      "dnaCadastrado": "CCCCCCCC"
+    }
+  ],
+  "evidencias": [
+    {
+      "id": 103,
+      "casoId": 2,
+      "tipo": "Arma",
+      "dnaColetado": "CCCCCCCC",
+      "analisada": true
+    },
+    {
+      "id": 104,
+      "casoId": 2,
+      "tipo": "Luva",
+      "dnaColetado": "CCCCCCCC",
+      "analisada": true
+    }
+  ],
+  "proxCasoId": 3,
+  "proxSuspeitoId": 4,
+  "proxEvidenciaId": 105
+}

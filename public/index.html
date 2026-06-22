@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>SISTEMA FORENSE</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+        
+        body { background-color: #09090b; color: #e4e4e7; font-family: 'Share Tech Mono', monospace; margin: 0; padding: 40px; }
+        .container { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+        
+        .header { text-align: center; border-bottom: 1px solid #27272a; padding-bottom: 20px; margin-bottom: 10px; }
+        h1 { margin: 0; font-size: 2.2em; letter-spacing: 6px; color: #fff; font-weight: 400; }
+        h2 { font-size: 1.05em; text-transform: uppercase; margin: 0 0 20px 0; border-bottom: 1px solid #27272a; padding-bottom: 12px; color: #f4f4f5; letter-spacing: 1.5px; }
+        
+        .grid-forms { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .grid-interna { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; width: 100%; }
+        
+        .painel-casos { background-color: #141416; border: 1px solid #27272a; padding: 24px; display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; border-radius: 6px; }
+        .painel-section { display: flex; flex-direction: column; gap: 10px; flex-grow: 1; }
+        .painel-label { color: #71717a; font-size: 0.85em; letter-spacing: 1.5px; font-weight: bold; }
+        .painel-controls { display: flex; gap: 12px; width: 100%; align-items: center; }
+        
+        .card { background-color: #141416; border: 1px solid #27272a; padding: 28px; border-radius: 6px; display: flex; flex-direction: column; gap: 14px; }
+        .card-full { background-color: #141416; border: 1px solid #27272a; padding: 28px; border-radius: 6px; display: flex; flex-direction: column; gap: 14px; }
+        
+        input, select, button { height: 42px; padding: 0 16px; margin: 0; background: #09090b; border: 1px solid #27272a; color: #fff; font-family: 'Share Tech Mono', monospace; font-size: 14px; box-sizing: border-box; outline: none; transition: all 0.15s ease; vertical-align: middle; }
+        input:focus, select:focus { border-color: #a1a1aa; background: #09090b; }
+        input { width: 100%; }
+        select { width: 100%; cursor: pointer; }
+        
+        button { background: #ffffff; color: #09090b; font-weight: bold; cursor: pointer; border-color: #ffffff; text-transform: uppercase; letter-spacing: 1px; border-radius: 4px; width: 100%; }
+        button:hover { background: #e4e4e7; border-color: #e4e4e7; }
+        
+        .btn-header { width: 150px; flex-shrink: 0; }
+        .btn-lote { background: #27272a; color: #fff; border-color: #27272a; }
+        .btn-lote:hover { background: #3f3f46; border-color: #3f3f46; }
+        
+        .btn-acao { height: 26px; padding: 0 12px; font-size: 11px; background: transparent; border: 1px solid #3f3f46; color: #a1a1aa; cursor: pointer; float: right; margin-left: 12px; border-radius: 3px; width: auto; }
+        .btn-acao:hover { background: #ffffff; color: #09090b; border-color: #ffffff; }
+        
+        .btn-excluir-caso { background: transparent; color: #f43f5e; border-color: #f43f5e; display: none; width: auto; padding: 0 20px; flex-shrink: 0; }
+        .btn-excluir-caso:hover { background: #f43f5e; color: #fff; border-color: #f43f5e; }
+        
+        ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+        li { padding: 16px; border-left: 2px solid #52525b; background: #09090b; color: #d4d4d8; line-height: 1.6; border-radius: 0 4px 4px 0; border-top: 1px solid #27272a; border-right: 1px solid #27272a; border-bottom: 1px solid #27272a; }
+        
+        .destaque { color: #ffffff; font-weight: bold; text-decoration: underline; text-underline-offset: 4px; }
+        .disabled-area { opacity: 0.15; pointer-events: none; filter: grayscale(100%); transition: opacity 0.25s ease; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>SISTEMA FORENSE</h1>
+        </div>
+
+        <div class="painel-casos">
+            <div class="painel-section">
+                <span class="painel-label">ARQUIVO DE INVESTIGAÇÃO</span>
+                <div class="painel-controls">
+                    <select id="selectCasos" onchange="selecionarCaso()"></select>
+                    <button id="btnDelCaso" class="btn-excluir-caso" onclick="deletarCaso()">EXCLUIR</button>
+                </div>
+            </div>
+            <div class="painel-section" style="max-width: 420px;">
+                <span class="painel-label">NOVO REGISTRO DOSSIÊ</span>
+                <div class="painel-controls">
+                    <input type="text" id="novoCaso" placeholder="IDENTIFICADOR" autocomplete="off">
+                    <button class="btn-header" onclick="criarCaso()">CRIAR</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="areaTrabalho" class="disabled-area" style="display: contents;">
+            <div class="grid-forms">
+                <div class="card">
+                    <h2>REGISTRO DE SUSPEITO</h2>
+                    <input type="text" id="nomeSuspeito" placeholder="NOME DO ALVO" autocomplete="off">
+                    <input type="text" id="dnaSuspeito" placeholder="DNA (8 CARACTERES: A,T,C,G)" maxlength="8" autocomplete="off">
+                    <button onclick="cadastrarSuspeito()">SALVAR DADOS</button>
+                </div>
+
+                <div class="card">
+                    <h2>ANEXAÇÃO DE EVIDÊNCIA</h2>
+                    <input type="text" id="tipoEvidencia" placeholder="TIPO DE MATERIAL" autocomplete="off">
+                    <input type="text" id="dnaEvidencia" placeholder="DNA COLETADO (8 CARACTERES)" maxlength="8" autocomplete="off">
+                    <button onclick="cadastrarEvidencia()">SALVAR MATERIAL</button>
+                </div>
+            </div>
+
+            <div class="card-full">
+                <h2>ANÁLISE DE LABORATÓRIO</h2>
+                <div class="grid-interna">
+                    <select id="selectSuspeito"></select>
+                    <select id="selectEvidencia"></select>
+                </div>
+                <div class="grid-interna">
+                    <button onclick="analisar()">PROCESSAR SELEÇÃO</button>
+                    <button class="btn-lote" onclick="analisarLote()">VARREDURA TOTAL DO CASO</button>
+                </div>
+            </div>
+
+            <div class="grid-forms">
+                <div class="card">
+                    <h2>ALVOS INVESTIGADOS</h2>
+                    <ul id="listaSuspeitos"></ul>
+                </div>
+
+                <div class="card">
+                    <h2>ARQUIVO DE EVIDÊNCIAS</h2>
+                    <ul id="listaEvidencias"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let casoAtivo = null;
+
+        async function carregarDados() {
+            const res = await fetch('/api/dados');
+            const data = await res.json();
+            
+            const selCasos = document.getElementById('selectCasos');
+            selCasos.innerHTML = '<option value="">-- SELECIONAR ARQUIVO --</option>';
+            data.casos.forEach(c => {
+                const flagStatus = c.status === 'Fechado' ? '[FECHADO]' : '[ABERTO]';
+                selCasos.innerHTML += `<option value="${c.id}">${c.id} - ${c.titulo} ${flagStatus}</option>`;
+            });
+            
+            if(casoAtivo) selCasos.value = casoAtivo;
+
+            if(!casoAtivo) {
+                document.getElementById('areaTrabalho').classList.add('disabled-area');
+                document.getElementById('btnDelCaso').style.display = 'none';
+                return;
+            }
+            
+            document.getElementById('areaTrabalho').classList.remove('disabled-area');
+            document.getElementById('btnDelCaso').style.display = 'block';
+
+            const listaS = document.getElementById('listaSuspeitos');
+            const selectS = document.getElementById('selectSuspeito');
+            listaS.innerHTML = ''; selectS.innerHTML = '';
+            data.suspeitos.filter(s => s.casoId === casoAtivo).forEach(s => {
+                const destaque = s.status === 'Indiciado' ? 'destaque' : '';
+                listaS.innerHTML += `<li>
+                    <button class="btn-acao" onclick="deletarSuspeito(${s.id})">DEL</button>
+                    <span style="color: #52525b;">[ID:${s.id}]</span> ${s.nome} <br>
+                    <span style="color: #3f3f46;">SEQ:</span> ${s.dnaCadastrado} | 
+                    <span style="color: #3f3f46;">STT:</span> <span class="${destaque}">${s.status.toUpperCase()}</span>
+                </li>`;
+                selectS.innerHTML += `<option value="${s.id}">${s.nome}</option>`;
+            });
+
+            const listaE = document.getElementById('listaEvidencias');
+            const selectE = document.getElementById('selectEvidencia');
+            listaE.innerHTML = ''; selectE.innerHTML = '';
+            data.evidencias.filter(e => e.casoId === casoAtivo).forEach(e => {
+                const proc = e.analisada ? 'SIM' : 'NAO';
+                listaE.innerHTML += `<li>
+                    <button class="btn-acao" onclick="deletarEvidencia(${e.id})">DEL</button>
+                    <span style="color: #52525b;">[ID:${e.id}]</span> ${e.tipo} <br>
+                    <span style="color: #3f3f46;">SEQ:</span> ${e.dnaColetado} | 
+                    <span style="color: #3f3f46;">CHK:</span> ${proc}
+                </li>`;
+                if (!e.analisada) selectE.innerHTML += `<option value="${e.id}">${e.tipo}</option>`;
+            });
+        }
+
+        function selecionarCaso() {
+            const val = document.getElementById('selectCasos').value;
+            casoAtivo = val ? parseInt(val) : null;
+            carregarDados();
+        }
+
+        async function criarCaso() {
+            const titulo = document.getElementById('novoCaso').value;
+            if(!titulo) return;
+            const res = await fetch('/casos', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({titulo}) });
+            if(res.ok) { 
+                const data = await res.json();
+                document.getElementById('novoCaso').value = ''; 
+                casoAtivo = data.id; 
+                carregarDados(); 
+            }
+        }
+
+        async function deletarCaso() {
+            if(!casoAtivo) return;
+            if(confirm("CONFIRMAR EXCLUSAO DEFINITIVA DO CASO E ANEXOS?")) {
+                await fetch(`/casos/${casoAtivo}`, { method: 'DELETE' });
+                casoAtivo = null;
+                carregarDados();
+            }
+        }
+
+        async function cadastrarSuspeito() {
+            const nome = document.getElementById('nomeSuspeito').value;
+            const dnaCadastrado = document.getElementById('dnaSuspeito').value;
+            const res = await fetch('/suspeitos', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({nome, dnaCadastrado, casoId: casoAtivo}) });
+            if(res.ok) { document.getElementById('nomeSuspeito').value = ''; document.getElementById('dnaSuspeito').value = ''; carregarDados(); }
+            else alert((await res.json()).erro);
+        }
+
+        async function cadastrarEvidencia() {
+            const tipo = document.getElementById('tipoEvidencia').value;
+            const dnaColetado = document.getElementById('dnaEvidencia').value;
+            const res = await fetch('/evidencias', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({tipo, dnaColetado, casoId: casoAtivo}) });
+            if(res.ok) { document.getElementById('tipoEvidencia').value = ''; document.getElementById('dnaEvidencia').value = ''; carregarDados(); }
+            else alert((await res.json()).erro);
+        }
+
+        async function deletarSuspeito(id) {
+            await fetch(`/suspeitos/${id}`, { method: 'DELETE' });
+            carregarDados();
+        }
+
+        async function deletarEvidencia(id) {
+            await fetch(`/evidencias/${id}`, { method: 'DELETE' });
+            carregarDados();
+        }
+
+        async function analisar() {
+            const suspeitoId = parseInt(document.getElementById('selectSuspeito').value);
+            const evidenciaId = parseInt(document.getElementById('selectEvidencia').value);
+            const res = await fetch('/pericia/analisar', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({suspeitoId, evidenciaId}) });
+            if(!res.ok) alert((await res.json()).erro);
+            carregarDados();
+        }
+
+        async function analisarLote() {
+            await fetch('/pericia/analisar-lote', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({casoId: casoAtivo}) });
+            carregarDados();
+        }
+
+        carregarDados();
+    </script>
+</body>
+</html>
