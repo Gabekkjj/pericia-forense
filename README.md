@@ -48,3 +48,4 @@ Apos iniciar, abra o navegador e acesse: http://localhost:3000
 ---
 
 Desenvolvido por Gabriel Bastos Hintz como requisito para a disciplina de Teste de Software.
+```
